@@ -1,0 +1,6 @@
+export ZONE_USERNAME=leida
+export ZONE_API_PASSWORD=miskipikkhash
+export ZONE_DOMAIN_FILTER=minudomain.ee
+export LISTEN_PORT=8888
+export DRY_RUN=true
+export DEBUG=true
