@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  strategy:
+    type: Recreate # Või RollingUpdate
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      # Kasuta eelnevalt loodud ServiceAccount'i
+      serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        # Kasuta sobivat official external-dns image'it
+        image: registry.k8s.io/external-dns/external-dns:v0.14.0 # Kontrolli uusimat versiooni
+        args:
+          # --source=service: Jälgib Service objekte (LoadBalancer tüüpi või annotatsioonidega)
+          - --source=service
+          # --source=ingress: Jälgib Ingress objekte
+          - --source=ingress
+          # --provider=webhook: Määrab teenusepakkujaks webhooki
+          - --provider=webhook
+          # --webhook-url: Sinu webhook Service'i URL klastri sees
+          # Formaat: http://<service-nimi>.<namespace>.svc.cluster.local:<port>
+          - --webhook-url=http://zoneee-webhook-service.external-dns.svc.cluster.local:8888
+          # --domain-filter: Milliseid domeene hallata. See PEAB vastama webhooki konfiguratsioonile!
+          - --domain-filter=example.com # Asenda oma domeeni(de)ga
+          # --policy=upsert-only: Ainult loob/uuendab kirjeid (turvalisem alustuseks)
+          # Või --policy=sync: Ka kustutab kirjeid, mis ei vasta enam Kubernetes ressurssidele
+          - --policy=upsert-only
+          # --log-level=info: Logimise tase (nt info, debug)
+          - --log-level=info
+          # --txt-owner-id: Unikaalne ID TXT kirjetele, et vältida konflikte teiste external-dns instantsidega (valikuline, aga soovitatav)
+          # - --txt-owner-id=my-zoneee-cluster
+          # --interval=1m: Kui tihti kontrollida muudatusi (vaikimisi 1m)
+          # - --interval=1m
+      securityContext:
+        # Hea praktika: kasuta mitte-root kasutajat, kui image seda võimaldab
+        # fsGroup: 65534 # Vana standard, uuemad image'id ei pruugi vajada
+        # runAsNonRoot: true
+

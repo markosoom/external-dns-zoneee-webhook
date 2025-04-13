@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoneee-webhook-service # See nimi läheb external-dns konfiguratsiooni
+  namespace: external-dns
+spec:
+  selector:
+    app: zoneee-webhook # Valib Podid, millel on see label (meie Deploymenti template'ist)
+  ports:
+  - protocol: TCP
+    port: 8888       # Port, mille kaudu Service on kättesaadav
+    targetPort: http # Viitab Deploymenti Podi nimega pordile 'http' (mis on 8888)
+  type: ClusterIP # Tavaline klastrisisene teenus

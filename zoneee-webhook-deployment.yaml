@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zoneee-webhook-deployment
+  namespace: external-dns
+  labels:
+    app: zoneee-webhook
+spec:
+  replicas: 1 # Võid skaleerida vastavalt vajadusele
+  selector:
+    matchLabels:
+      app: zoneee-webhook
+  template:
+    metadata:
+      labels:
+        app: zoneee-webhook
+    spec:
+      containers:
+      - name: webhook
+        # Asenda oma container image'i nime ja tag'iga
+        image: markosoom/external-dns-zoneee-webhook:0.2
+        args:
+          # Konfigureerime webhooki käsurea argumentidega
+          # Domeenifilter PEAB vastama external-dns konfiguratsioonile
+          - "-domain-filter=minudomeen.e" # Asenda oma domeeni(de)ga, komadega eraldatud
+          - "-listen-addr=:8888" # Port, mida container kuulab
+          # Võimalik lisada: -dry-run=true testimiseks
+        ports:
+        - containerPort: 8888 # Peab vastama -listen-addr pordile
+          name: http
+        env:
+          # Laeme API võtmed Secretist keskkonnamuutujatesse
+          - name: ZONEEE_API_USER
+            valueFrom:
+              secretKeyRef:
+                name: zoneee-api-credentials # Secreti nimi
+                key: ZONEEE_API_USER        # Võti Secreti sees
+          - name: ZONEEE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: zoneee-api-credentials # Secreti nimi
+                key: ZONEEE_API_KEY         # Võti Secreti sees
+        # Tervisekontrollid (Readiness & Liveness Probes)
+        readinessProbe:
+          httpGet:
+            path: /healthz # Kasutame /healthz endpointi
+            port: 8888
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8888
+          initialDelaySeconds: 15
+          periodSeconds: 20

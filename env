@@ -1,6 +1,4 @@
-export ZONE_USERNAME=leida
-export ZONE_API_PASSWORD=miskipikkhash
-export ZONE_DOMAIN_FILTER=minudomain.ee
-export LISTEN_PORT=8888
-export DRY_RUN=true
-export DEBUG=true
+export ZONEEE_API_USER="juta"
+export ZONEEE_API_KEY="miski_pik_hash_midasaabzoneeleheltgenereerida"
+export ZONEEE_DOMAIN_FILTER="minudomeen.ee" # Domeen(id), mida hallata
+#./zoneee-webhook --listen-addr ":8080" [--dry-run]

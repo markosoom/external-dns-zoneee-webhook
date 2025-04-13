@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      serviceAccountName: external-dns # Veendu, et ServiceAccount on olemas ja õigustega
+      containers:
+      - name: external-dns
+        image: registry.k8s.io/external-dns/external-dns:v0.14.0 # Kasuta sobivat versiooni
+        args:
+        - --source=service # Või ingress, vastavalt vajadusele
+        - --source=ingress
+        - --provider=webhook
+        - --webhook-url=http://<zoneee-webhook-teenuse-nimi>.<namespace>.svc.cluster.local:8080 # Asenda oma webhooki teenuse URLiga
+        - --domain-filter=sinudomeen.ee # Peab vastama webhooki konfiguratsioonile
+        - --policy=upsert-only # Või 'sync', sõltuvalt soovitud käitumisest
+        - --log-level=info # Või debug
+        # Webhook spetsiifilised argumendid, kui neid on vaja (nt autentimine webhooki enda jaoks)
+      securityContext:
+        fsGroup: 65534 # Requires non-root user image
+
