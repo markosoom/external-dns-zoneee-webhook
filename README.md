@@ -92,5 +92,5 @@ $ docker buildx build --builder=container --platform linux/arm64,linux/amd64 -t 
 ```
 
 ### Vaja teha.
-Lisa kubernetese näide.
+Kubernetese näidete reaalne testimine. Ja helm charti kirjutamine.
 
