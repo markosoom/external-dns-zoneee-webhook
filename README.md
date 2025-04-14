@@ -94,3 +94,7 @@ $ docker buildx build --builder=container --platform linux/arm64,linux/amd64 -t 
 ### Vaja teha.
 Kubernetese näidete reaalne testimine. Ja helm charti kirjutamine.
 
+### 📜 Litsents
+See projekt on litsentseeritud [Apache 2.0] litsentsi alusel.
+
+
