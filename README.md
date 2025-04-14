@@ -1,6 +1,6 @@
 # External-dns-zoneee-webhook
 
-zoneee webhook võimaldab kubernetese klustrisiseselt hallata väliseid dns nimesid.
+zoneee webhook rakendus on ehitatud API https://api.zone.eu/v2 api docki järgi ja võimaldab kubernetese klustrisiseselt hallata väliseid dns nimesid.
 Hetkel on toetatud A, CNAME, TXT, MX ja SRV kirjete haldamine.
 Töökeskkonnas ei soovita kasutada, pole piisavalt testitud.
 Pole lisatud kubernetese näiteid... pead ise mõtlema.
@@ -92,5 +92,5 @@ $ docker buildx build --builder=container --platform linux/arm64,linux/amd64 -t 
 ```
 
 ### Vaja teha.
-Lisatud kubernetese näide.
+Lisa kubernetese näide.
 
