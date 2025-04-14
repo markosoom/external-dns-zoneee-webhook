@@ -18,7 +18,7 @@ spec:
       containers:
       - name: webhook
         # Asenda oma container image'i nime ja tag'iga
-        image: markosoom/external-dns-zoneee-webhook:0.2
+        image: markosoom/external-dns-zoneee-webhook:v0.2
         args:
           # Konfigureerime webhooki käsurea argumentidega
           # Domeenifilter PEAB vastama external-dns konfiguratsioonile
