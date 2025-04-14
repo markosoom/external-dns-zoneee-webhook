@@ -63,7 +63,7 @@ Vaata kas CNAME loodi.
 curl -u "kasutaja:suva2apitoken" -H 'Content-Type: application/json' https://api.zone.eu/v2/dns/sinudomeen.ee/cname|jq
 ```
 
-Kui kirje tekkis siis vaata id ja CNAME test kustutamiseks kasuta
+Kui kirje tekkis siis vaata id ja CNAME test kustutamiseks kasuta seda ID-d
 ```sh
 export CNAME_ID="12345"
 ```
